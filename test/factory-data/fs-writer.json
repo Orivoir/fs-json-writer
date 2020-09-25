@@ -1,0 +1,27 @@
+{
+  "js": [
+      {
+        "entry": {
+          "path": "./factory-data/factory-generated.js",
+          "state": {
+            "a": 1,
+            "b": 2,
+            "c": 3
+          }
+        }
+      },
+      {
+        "entry": {
+          "path": "./factory-data/factory-generated.js",
+          "state": {
+            "a": 1,
+            "b": 2,
+            "c": [1,2,3],
+            "d": { "a": "hi" }
+          },
+          "isEs6": false,
+          "isNoQuote": true
+        }
+      }
+    ]
+}

@@ -1,0 +1,55 @@
+[
+  {
+    "entry": {
+      "a": 42,
+      "b": 12,
+      "c": true
+    },
+    "output": false
+  },
+  {
+    "entry": {
+      "a": 42,
+      "b": null,
+      "c": true,
+      "d": false
+    },
+    "output": false
+  },
+  {
+    "entry": {
+      "a": 42,
+      "b": null,
+      "c": true,
+      "d": {}
+    },
+    "output": true
+  },
+  {
+    "entry": {
+      "a": 42,
+      "b": null,
+      "c": true,
+      "d": []
+    },
+    "output": true
+  },
+  {
+    "entry": {
+      "a": 42,
+      "b": null,
+      "d": [],
+      "c": true
+    },
+    "output": false
+  },
+  {
+    "entry": {
+      "a": 42,
+      "b": null,
+      "d": {},
+      "c": true
+    },
+    "output": false
+  }
+]

@@ -1,11 +1,13 @@
 const fs = require('fs');
 const createContentWrite = require('./lib/create-content-write');
 
-global.__depth = 1;
-global.__append = 1;
+function hydrateOptions({isEs6, isNoQuote}) {
 
-// if is a JS or JSON file
-global.__isPurelyJson = null;
+  writeJson.details.options.isEs6 = !!isEs6;
+  writeJson.details.options.isNoQuote = !!isNoQuote;
+
+  return writeJson.details.options;
+}
 
 function writeJson({
   state,
@@ -14,11 +16,14 @@ function writeJson({
   isNoQuote
 }) {
 
+  hydrateOptions( { isEs6, isNoQuote } );
+
   append = createContentWrite( {
     state,
     path,
     isEs6,
-    isNoQuote
+    isNoQuote,
+    worker: writeJson.details
   } );
 
   fs.writeFileSync(
@@ -31,13 +36,15 @@ function writeJson({
 
 }
 
-// Promise async writing
+// Promise async writer
 writeJson.async = function({
   state,
   path,
   isEs6,
   isNoQuote
 }) {
+
+  hydrateOptions( { isEs6, isNoQuote } );
 
   return new Promise( (resolve,reject) => {
 
@@ -47,7 +54,8 @@ writeJson.async = function({
         state,
         path,
         isEs6,
-        isNoQuote
+        isNoQuote,
+        worker: writeJson.details
       }),
       error => {
 
@@ -79,14 +87,19 @@ writeJson.legacyAsync = function({
   onSuccess
 }) {
 
+  hydrateOptions( { isEs6, isNoQuote } );
+
   fs.writeFile(
     path,
+
     createContentWrite({
       state,
       path,
       isEs6,
-      isNoQuote
+      isNoQuote,
+      worker: writeJson.details
     }),
+
     error => {
 
       if( error ) {
@@ -119,6 +132,14 @@ writeJson.legacyAsync = function({
     }
   )
 
+};
+
+writeJson.details = {
+  append: "",
+  options: {
+    isEs6: null,
+    isNoQuote: null
+  }
 };
 
 module.exports = writeJson;

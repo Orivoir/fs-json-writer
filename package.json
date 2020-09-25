@@ -1,9 +1,16 @@
 {
   "name": "fs-json-writer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "write JSON content with persist indent depths from file system",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "mocha ./test",
+    "coverage": "nyc npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Orivoir/fs-json-writer.git"
+  },
   "keywords": [
     "fs",
     "json",
