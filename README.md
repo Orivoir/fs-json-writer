@@ -147,7 +147,7 @@ any other value is convert with native method `object.toString()`.
 If method **toString** not implemeted on target object throw **TypeError**
 
 
-> This package has been developed for the need of package [react-native-css-parser](https://npmjs.com/package/react-native-css-parser)
+> This package has been developed for the need of package [react-native-style-parser](https://npmjs.com/package/react-native-style-parser)
 and have been export because hight high reusability
 
 Please if you detect any bugs/undetermined comportement open new [issue](https://github.com/Orivoir/fs-json-writer/issues)
