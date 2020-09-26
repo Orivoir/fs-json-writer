@@ -9,6 +9,17 @@ function hydrateOptions({isEs6, isNoQuote}) {
   return writeJson.details.options;
 }
 
+function prepare() {
+
+  writeJson.details = {
+    append: "",
+    options: {
+      isEs6: null,
+      isNoQuote: null
+    }
+  };
+}
+
 function writeJson({
   state,
   path,
@@ -16,6 +27,7 @@ function writeJson({
   isNoQuote
 }) {
 
+  prepare();
   hydrateOptions( { isEs6, isNoQuote } );
 
   append = createContentWrite( {
@@ -44,6 +56,7 @@ writeJson.async = function({
   isNoQuote
 }) {
 
+  prepare();
   hydrateOptions( { isEs6, isNoQuote } );
 
   return new Promise( (resolve,reject) => {
@@ -87,6 +100,7 @@ writeJson.legacyAsync = function({
   onSuccess
 }) {
 
+  prepare();
   hydrateOptions( { isEs6, isNoQuote } );
 
   fs.writeFile(
