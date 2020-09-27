@@ -7,6 +7,8 @@ data transfer.
 
 This package full rewrite a *JavaScript Object Notation* with resolve tabulation depth and resolve nested object/array.
 
+> currently write with nested array/object can generate inccuracy. Await version **1.0.0** before usage in prod.
+
 ## installation
 
 in depending your need you can install at **dev-dependencies**

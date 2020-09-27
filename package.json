@@ -1,10 +1,11 @@
 {
   "name": "fs-json-writer",
-  "version": "1.0.1",
+  "version": "0.9.0-beta",
   "description": "write JSON content with persist indent depths from file system",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test",
+    "test-fw": "mocha ./test/fs-writer.test.js",
     "coverage": "nyc npm run test"
   },
   "repository": {

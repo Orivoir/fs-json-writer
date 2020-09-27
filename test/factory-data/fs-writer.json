@@ -14,10 +14,14 @@
         "entry": {
           "path": "./factory-data/factory-generated.js",
           "state": {
-            "a": 1,
-            "b": 2,
-            "c": [1,2,3],
-            "d": { "a": "hi" }
+            "e": [
+              {
+                "abc": "foobar"
+              },
+              2,3, {
+                "de": 42
+              }
+            ]
           },
           "isEs6": false,
           "isNoQuote": true
