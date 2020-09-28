@@ -20,7 +20,7 @@ function writeJson( config ) {
   const content = createContent( config );
 
   createFile({
-    path,
+    path: config.path,
     content
   });
 
@@ -38,7 +38,7 @@ writeJson.async = function( config ) {
   return new Promise( (resolve, reject) => {
 
     createFile({
-      path,
+      path: config.path,
       content,
       callback: function( error ) {
 
@@ -68,7 +68,8 @@ writeJson.legacyAsync = function( config ) {
   const {
     callback,
     onSuccess,
-    onError
+    onError,
+    path
   } = config;
 
   const content = createContent( config );
