@@ -12,7 +12,7 @@ This package full rewrite a *JavaScript Object Notation* with resolve tabulation
   - [json file](#json-file)
   - [js file](#js-file)
   - [async](#async)
-- [optionals][#optionals]
+- [optionals](#optionals)
 
 ## installation
 
