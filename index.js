@@ -1,159 +1,115 @@
-const fs = require('fs');
-const createContentWrite = require('./lib/create-content-write');
+/**
+ * @file endpoint package <https://npmjs.com/package/fs-json-writer> this package has been developed for the need of package <https://npmjs.com/package/react-native-style-parser>
+ *
+ * @package fs-json-writer
+ * @version 0.9.0
+ * @license BDSD-2-CLAUSE
+ * @author S.GABORIEAU <sam.gabor@hotmail.com> (https://github.com/Orivoir/)
+ * @see README.md
+ */
 
-function hydrateOptions({isEs6, isNoQuote}) {
+const createFile = require('./lib/create-file');
+const createContent = require('./lib/create-content');
 
-  writeJson.details.options.isEs6 = !!isEs6;
-  writeJson.details.options.isNoQuote = !!isNoQuote;
+/**
+ * @description synchrone write *JSON* content
+ * @param {{path: string, state: object, isEs6?: boolean, isNoQuote?: boolean, onReplace?: () => any, space?: string|number }} config
+ */
+function writeJson( config ) {
 
-  return writeJson.details.options;
-}
+  const content = createContent( config );
 
-function prepare() {
-
-  writeJson.details = {
-    append: "",
-    options: {
-      isEs6: null,
-      isNoQuote: null
-    }
-  };
-}
-
-function writeJson({
-  state,
-  path,
-  isEs6,
-  isNoQuote
-}) {
-
-  prepare();
-  hydrateOptions( { isEs6, isNoQuote } );
-
-  append = createContentWrite( {
-    state,
+  createFile({
     path,
-    isEs6,
-    isNoQuote,
-    worker: writeJson.details
-  } );
-
-  fs.writeFileSync(
-    path,
-    append,
-    {
-      encoding: "utf-8"
-    }
-  );
+    content
+  });
 
 }
 
-// Promise async writer
-writeJson.async = function({
-  state,
-  path,
-  isEs6,
-  isNoQuote
-}) {
+/**
+ * @description asynchrone write *JSON* content with usage **Promise** API
+ * @param {{path: string, state: object, isEs6?: boolean, isNoQuote?: boolean, onReplace?: () => any, space?: string|number}} config
+ * @returns Promise
+ */
+writeJson.async = function( config ) {
 
-  prepare();
-  hydrateOptions( { isEs6, isNoQuote } );
+  const content = createContent( config );
 
-  return new Promise( (resolve,reject) => {
+  return new Promise( (resolve, reject) => {
 
-    fs.writeFile(
+    createFile({
       path,
-      createContentWrite({
-        state,
-        path,
-        isEs6,
-        isNoQuote,
-        worker: writeJson.details
-      }),
-      error => {
+      content,
+      callback: function( error ) {
 
         if( error ) {
           reject( error );
         } else {
 
           resolve( {
-            state,
-            path
+            path,
+            content,
+            state
           } );
-
         }
       }
-    )
+    });
 
   } );
 
 };
 
-// permuted callback system natively used from file system module async
-writeJson.legacyAsync = function({
-  state,
-  path,
-  isEs6,
-  isNoQuote,
-  callback,
-  onError,
-  onSuccess
-}) {
+/**
+ * @description asynchrone write *JSON* content with callback response permuted to natively fs module
+ * @param {{path: string, state: object, isEs6?: boolean, isNoQuote?: boolean, callback?: () => void, onError?: () => void, onSuccess?: () => void, onReplace?: () => any, space?: string|number}} config
+ */
+writeJson.legacyAsync = function( config ) {
 
-  prepare();
-  hydrateOptions( { isEs6, isNoQuote } );
+  const {
+    callback,
+    onSuccess,
+    onError
+  } = config;
 
-  fs.writeFile(
+  const content = createContent( config );
+
+  createFile({
     path,
+    content,
+    callback: error => {
 
-    createContentWrite({
-      state,
-      path,
-      isEs6,
-      isNoQuote,
-      worker: writeJson.details
-    }),
+      if( callback instanceof Function ) {
 
-    error => {
-
-      if( error ) {
-
-        if( onError instanceof Function ) {
-
-          onError( error );
-        } else if( callback instanceof Function ) {
-
-          callback( error );
-        }
+        callback( error || {
+          path,
+          content,
+          state
+        } );
 
       } else {
 
-        if( onSuccess instanceof Function ) {
+        if( error ) {
+
+          if( onError instanceof Function ) {
+
+            onError( error );
+          }
+
+        } else if( onSuccess instanceof Function ) {
 
           onSuccess( {
-            state,
-            path
+            path,
+            content,
+            state
           } );
-        } else if( callback instanceof Function ) {
 
-          callback( {
-            state,
-            path
-          } );
         }
 
       }
+
     }
-  )
+  });
 
-};
-
-writeJson.details = {
-  append: "",
-  options: {
-    isEs6: null,
-    isNoQuote: null
-  }
 };
 
 module.exports = writeJson;

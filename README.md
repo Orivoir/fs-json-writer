@@ -7,7 +7,12 @@ data transfer.
 
 This package full rewrite a *JavaScript Object Notation* with resolve tabulation depth and resolve nested object/array.
 
-> currently write with nested array/object can generate inccuracy. Await version **1.0.0** before usage in prod.
+- [installation](#installation)
+- [usage](#usage)
+  - [json file](#json-file)
+  - [js file](#js-file)
+  - [async](#async)
+- [optionals][#optionals]
 
 ## installation
 
@@ -22,7 +27,6 @@ or with yarn
 ```bash
 > yarn add fs-json-writer
 ```
-
 
 ## usage
 
@@ -77,8 +81,7 @@ jsonWriter({
   path: path.join( __dirname, "./file-name.js" ),
   state: myHumaJson,
 
-  isEs6: true,
-  isNoQuote: true
+  isEs6: true
 });
 
 ```
@@ -88,13 +91,17 @@ extension of filename determined if content should be JS or JSON file.
 output *(filename.js)*
 ```js
 export default {
-  version: "1.0.0",
-  details: "this is a stable version with goodly peoples ^.^"
+
+  "version": "1.0.0",
+  "details": "this is a stable version with goodly peoples ^.^"
 }
 ```
 
+### async
 
-### nested
+Can **asynchrone** generate content with [Promise API](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Promise) or inehrit from natively [fs module](https://nodejs.org/docs/latest-v0.12.x/doc/api/fs.html) callback system.
+
+#### Promise
 
 ```js
 const jsonWriter = require('fs-json-writer');
@@ -104,52 +111,73 @@ const path = require('path');
 const myHumanJson = {
 
   version: "1.0.0",
-  details: "this is a stable version with goodly peoples ^.^",
-
-  contributor: [
-    "Mr.Goodman",
-    "Mr.Goodman-2",
-    "Mr.Goodman-3"
-  ]
+  details: "this is a stable version with goodly peoples ^.^"
 };
 
-jsonWriter({
+jsonWriter.async({
+
+  path: path.join( __dirname, "./file-name.js" ),
+  state: myHumaJson,
+
+  isEs6: true
+})
+.then( ({ path, content, state }) => {
+
+  console.log( "success write at:" + path + " the content: " + content + " from javascript object: ", state );
+
+} )
+.catch( error => {
+
+  console.log( error );
+
+  throw "Oops, something went wrong.";
+
+} );
+
+```
+
+#### Callback
+
+
+```js
+const jsonWriter = require('fs-json-writer');
+const path = require('path');
+
+
+const myHumanJson = {
+
+  version: "1.0.0",
+  details: "this is a stable version with goodly peoples ^.^"
+};
+
+jsonWriter.legacyAsync({
 
   path: path.join( __dirname, "./file-name.js" ),
   state: myHumaJson,
 
   isEs6: true,
-  isNoQuote: true
+  isNoQuote: true,
+
+  onError: error => {
+
+    console.log( error );
+
+    throw "Oops, something went wrong.";
+  },
+
+  onSuccess: ({path, content, state}) => {
+
+    console.log( "success write at:" + path + " the content: " + content + " from javascript object: ", state );
+
+  }
+
 });
 
 ```
 
-You can nested objects any depth.
+## optionals
 
-output *(filename.js)*
-```js
-export default {
-  version: "1.0.0",
-  details: "this is a stable version with goodly peoples ^.^",
-
-  contributor: [
-    "Mr.Goodman",
-    "Mr.Goodman-2",
-    "Mr.Goodman-3"
-  ]
-}
-```
-
-### reject
-
-During generate of JSON file if argument `state` is a [not circular structure JSON](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Erreurs/Cyclic_object_value)
-the functions is remplaced with string value contains function name,
-any other value is convert with native method `object.toString()`.
-
-If method **toString** not implemeted on target object throw **TypeError**
-
-
-> This package has been developed for the need of package [react-native-style-parser](https://npmjs.com/package/react-native-style-parser)
-and have been export because hight high reusability
+From a syn/async call can define optionals attributes: `onReplace: () => any | string[] | number[]`, `space: string | number`
+this attributes is passed to **arg2** and **arg3** of [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
 
 Please if you detect any bugs/undetermined comportement open new [issue](https://github.com/Orivoir/fs-json-writer/issues)
