@@ -81,7 +81,8 @@ jsonWriter({
   path: path.join( __dirname, "./file-name.js" ),
   state: myHumaJson,
 
-  isEs6: true
+  isEs6: true,
+  isNoQuote: true
 });
 
 ```
@@ -92,8 +93,8 @@ output *(filename.js)*
 ```js
 export default {
 
-  "version": "1.0.0",
-  "details": "this is a stable version with goodly peoples ^.^"
+  version: "1.0.0",
+  details: "this is a stable version with goodly peoples ^.^"
 }
 ```
 
